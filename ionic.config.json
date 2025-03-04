@@ -1,0 +1,7 @@
+{
+  "name": "GSBVisites",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
