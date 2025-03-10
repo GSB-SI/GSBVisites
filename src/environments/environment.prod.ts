@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  baseUrl: 'https://apigsb-visites.vercel.app',
+  baseUrl: 'https://gsb-visites-api.vercel.app',
 };

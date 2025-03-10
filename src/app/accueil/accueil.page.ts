@@ -1,15 +1,16 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonButton,
   IonButtons,
+  IonContent,
+  IonHeader,
   IonMenuButton,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {RouterLink} from '@angular/router';
+
 @Component({
   selector: 'app-accueil',
   templateUrl: './accueil.page.html',
@@ -25,11 +26,12 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     IonButtons,
     IonMenuButton,
     RouterLink,
-    RouterLinkActive,
   ],
 })
 export class AccueilPage implements OnInit {
-  constructor() {}
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 }

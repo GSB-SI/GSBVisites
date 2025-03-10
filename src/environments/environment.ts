@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://apigsb-visites.vercel.app',
+  baseUrl: 'https://gsb-visites-api.vercel.app',
 };
 
 /*

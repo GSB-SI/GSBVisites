@@ -1,0 +1,15 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>medecins-du-departement</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-searchbar [debounce]="1000" show-clear-button="always"></ion-searchbar>
+  <ion-list lines="full">
+    <ion-item *ngFor="let medecin of medecinsFiltres" [routerLink]="['/detail-medecin', medecin]" button detail="true">
+      <ion-label>
+        {{ JSON.stringify(medecin) }}
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
