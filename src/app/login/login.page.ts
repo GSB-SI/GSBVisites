@@ -14,10 +14,13 @@ import {
   IonInput,
   IonText,
   IonButton,
+  IonCheckbox,
 } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
 import { Account } from '../services/interfaces';
+import { AppComponent } from '../app.component';
+import { Preferences } from '@capacitor/preferences';
 
 @Component({
   selector: 'app-login',
@@ -31,6 +34,7 @@ import { Account } from '../services/interfaces';
     IonInput,
     IonText,
     IonButton,
+    IonCheckbox,
     CommonModule,
     ReactiveFormsModule,
   ],
@@ -41,14 +45,28 @@ export class LoginPage implements OnInit {
     private fb: FormBuilder,
     private api: ApiService,
     private router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private appComponent: AppComponent
   ) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required],
+      remember: [false, Validators.required],
     });
+
+    const username = await Preferences.get({ key: 'username' });
+    const password = await Preferences.get({ key: 'password' });
+    const remember = await Preferences.get({ key: 'remember' });
+
+    if (remember.value) {
+      this.loginForm = this.fb.group({
+        username: [username.value, Validators.required],
+        password: [password.value, Validators.required],
+        remember: [remember.value, Validators.required],
+      });
+    }
   }
   async afficheToast(message: string, duree: number, position: any) {
     const toast = await this.toastController.create({
@@ -59,11 +77,20 @@ export class LoginPage implements OnInit {
     await toast.present();
   }
 
-  onSubmit() {
+  async onSubmit() {
     // Le formulaire est valide (selon les validators définis)
     if (this.loginForm.valid) {
       // on récupère les valeurs saisies dans les constantes username et password
-      const { username, password } = this.loginForm.value;
+      const { username, password, remember } = this.loginForm.value;
+      if (remember) {
+        await Preferences.set({ key: 'username', value: username });
+        await Preferences.set({ key: 'password', value: password });
+        await Preferences.set({ key: 'remember', value: remember });
+      } else {
+        await Preferences.set({ key: 'username', value: '' });
+        await Preferences.set({ key: 'password', value: '' });
+        await Preferences.set({ key: 'remember', value: remember });
+      }
       // Appel de la méthode login du service ApiService
       this.api.login(username, password).subscribe({
         next: (reponse: any) => {
@@ -101,5 +128,27 @@ export class LoginPage implements OnInit {
         },
       });
     }
+  }
+  async ionViewWillEnter() {
+    this.appComponent.isMenuDisabled = true;
+    const username = await Preferences.get({ key: 'username' });
+    const password = await Preferences.get({ key: 'password' });
+    const remember = await Preferences.get({ key: 'remember' });
+    this.loginForm = this.fb.group({
+      username: [username.value, Validators.required],
+      password: [password.value, Validators.required],
+      remember: [remember.value, Validators.required],
+    });
+  }
+  async ionViewDidLeave() {
+    this.appComponent.isMenuDisabled = false;
+    const username = await Preferences.get({ key: 'username' });
+    const password = await Preferences.get({ key: 'password' });
+    const remember = await Preferences.get({ key: 'remember' });
+    this.loginForm = this.fb.group({
+      username: [username.value, Validators.required],
+      password: [password.value, Validators.required],
+      remember: [remember.value, Validators.required],
+    });
   }
 }

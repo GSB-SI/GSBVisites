@@ -2,22 +2,23 @@ import { Injectable } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
 import { from, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { Account } from './interfaces';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
   private apiUrl = `${environment.baseUrl}`;
-  public accountInfos!: Account;
+  public accountInfos!: any;
+
   constructor() {
     this.accountInfos = {
-      login: '',
-      nom: '',
-      prenom: '',
-      token: '',
-      token_type: '',
+      accessToken: '',
       userId: '',
+      name: '',
+      firstName: '',
+      username: '',
+      hireDate: '',
+      department: '',
     };
   }
 
@@ -36,6 +37,13 @@ export class ApiService {
     return from(
       CapacitorHttp.post(options)
         .then((res) => {
+          this.accountInfos.accessToken = res.data.accessToken;
+          this.accountInfos.idUser = res.data.user._id;
+          this.accountInfos.name = res.data.user.name;
+          this.accountInfos.username = res.data.user.username;
+          this.accountInfos.hireDate = res.data.user.hireDate;
+          this.accountInfos.department = res.data.user.department;
+          this.accountInfos.firstName = res.data.user.firstName;
           return res;
         })
         .catch((error) => {
@@ -49,7 +57,7 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/doctors`,
       headers: {
-        Authorization: 'Bearer' + this.accountInfos.token,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -74,7 +82,7 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/doctors/${id}`,
       headers: {
-        Authorization: 'Bearer' + this.accountInfos.token,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -99,7 +107,7 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/reports`,
       headers: {
-        Authorization: 'Bearer' + this.accountInfos.token,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -120,11 +128,36 @@ export class ApiService {
     );
   }
 
+  getMesRapports(userId: any) {
+    const options = {
+      url: `${this.apiUrl}/reports/user/${userId}`,
+      headers: {
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      params: userId,
+    };
+    if (!userId) {
+      delete options.params;
+    }
+    return from(
+      CapacitorHttp.get(options)
+        .then((res) => {
+          return res;
+        })
+        .catch((error) => {
+          console.error('Error in CapacitorHttp.post:', error);
+          throw error;
+        })
+    );
+  }
+
   getUnRapport(id: any) {
     const options = {
       url: `${this.apiUrl}/reports/${id}`,
       headers: {
-        Authorization: 'Bearer' + this.accountInfos.token,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -149,7 +182,7 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/reports`,
       headers: {
-        Authorization: 'Bearer' + this.accountInfos.token,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -174,7 +207,7 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/reports/${id}`,
       headers: {
-        Authorization: 'Bearer' + this.accountInfos.token,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
@@ -199,7 +232,7 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/reports/${id}`,
       headers: {
-        Authorization: 'Bearer' + this.accountInfos.token,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
