@@ -19,5 +19,10 @@ export const routes: Routes = [
     path: 'medecins-du-departement',
     loadComponent: () => import('./medecins-du-departement/medecins-du-departement.page').then(m => m.MedecinsDuDepartementPage)
   },
+  {
+    path: 'detail-medecin/:id',
+    loadComponent: () => import('./detail-medecin/detail-medecin.page').then(m => m.DetailMedecinPage)
+  },
+
 
 ];
