@@ -1,0 +1,115 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/accueil"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nouveau rapport de visite</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form #rapportForm="ngForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="stacked">Date</ion-label>
+      <ion-datetime
+        [(ngModel)]="rapport.date"
+        display-format="DD/MM/YYYY"
+        name="date"
+        placeholder="Sélectionner une date">
+      </ion-datetime>
+    </ion-item>
+
+    <ion-item (click)="openMedecinPopup()" button>
+      <ion-label>Médecin</ion-label>
+      <ion-note slot="end">
+        {{ rapport.doctorId ? rapport.doctorId : 'Sélectionner' }}
+      </ion-note>
+    </ion-item>
+
+    <ion-item (click)="openMotifPopup()" button>
+      <ion-label>Motif</ion-label>
+      <ion-note slot="end">
+        {{ rapport.reason ? rapport.reason : 'Sélectionner' }}
+      </ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Bilan</ion-label>
+      <ion-textarea
+        [(ngModel)]="rapport.summary"
+        name="bilan"
+        placeholder="Entrer le bilan">
+      </ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Médicaments offerts</ion-label>
+      <ion-button (click)="openOffreMedicamentModal()" fill="outline" slot="end">
+        Ajouter
+      </ion-button>
+    </ion-item>
+
+    <ion-item>
+      <h3>Liste des médicaments offerts</h3>
+    </ion-item>
+    <ion-list>
+      <ion-item
+        *ngFor="let specimen of rapport.specimens"
+        button
+        detail="false"
+      >
+        <ion-label>
+          <i>{{ specimen.quantity }} {{ specimen.medicineId }}</i>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button [disabled]="!rapportForm.form.valid" expand="block" type="submit">
+            Enregistrer
+          </ion-button>
+        </ion-col>
+        <ion-col>
+          <ion-button (click)="cancel()" color="medium" expand="block" type="button">
+            Annuler
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+
+  <ion-modal [isOpen]="isMedicamentModalOpen" cssClass="custom-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Offre médicaments</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeOffreMedicamentModal()">Fermer</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-item (click)="openListeMedicamentsPopup()" button>
+          <ion-label>Médicament</ion-label>
+          <ion-note slot="end">
+            {{ rapportSpecimens.medicineId ? rapportSpecimens.medicineId : 'Sélectionner' }}
+          </ion-note>
+        </ion-item>
+        <ion-item>
+          <ion-label position="stacked">Quantité</ion-label>
+          <ion-input
+            [(ngModel)]="rapportSpecimens.quantity"
+            name="quantite"
+            placeholder="Entrer la quantité"
+            type="number">
+          </ion-input>
+        </ion-item>
+        <ion-button (click)="validerOffreMedicament()" expand="block">
+          Valider
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>

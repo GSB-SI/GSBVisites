@@ -1,23 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ApiService } from '../services/api.service';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { IonicModule, ToastController } from '@ionic/angular';
-import { environment } from '../../environments/environment';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {ApiService} from '../services/api.service';
+import {Router, RouterLink} from '@angular/router';
+import {ToastController} from '@ionic/angular';
 import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonButtons,
-  IonMenuButton,
-  IonList,
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonHeader,
+  IonIcon,
   IonItem,
   IonLabel,
-  IonSearchbar,
+  IonList,
+  IonMenuButton,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
-import { Rapport } from '../services/interfaces';
 
 @Component({
   selector: 'app-mes-rapports',
@@ -33,22 +33,22 @@ import { Rapport } from '../services/interfaces';
     IonMenuButton,
     IonList,
     IonItem,
-    IonSearchbar,
     IonLabel,
     CommonModule,
     FormsModule,
     RouterLink,
-    RouterLinkActive,
+    IonFab,
+    IonFabButton,
+    IonIcon,
   ],
 })
 export class MesRapportsPage implements OnInit {
   public rapports: any[];
-  public apiUrl = `${environment.baseUrl}`;
 
   constructor(
     private toastController: ToastController,
     private api: ApiService,
-    private router: Router
+    protected router: Router
   ) {
     this.rapports = [];
   }

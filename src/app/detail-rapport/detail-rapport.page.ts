@@ -1,32 +1,23 @@
-import { Component, OnInit, OnDestroy, inject, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 import {
+  IonButtons,
   IonContent,
   IonHeader,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonMenuButton,
   IonTitle,
   IonToolbar,
-  IonBackButton,
-  IonButtons,
-  IonItem,
-  IonIcon,
-  IonButton,
-  IonMenuButton,
-  IonList,
-  IonLabel,
 } from '@ionic/angular/standalone';
-import {
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  ActivatedRoute,
-} from '@angular/router';
-import { ToastController } from '@ionic/angular';
-import { environment } from 'src/environments/environment';
-import { ApiService } from '../services/api.service';
-import { Rapport } from '../services/interfaces';
-import { Capacitor } from '@capacitor/core';
+import {ActivatedRoute, Router,} from '@angular/router';
+import {ToastController} from '@ionic/angular';
+import {environment} from 'src/environments/environment';
+import {ApiService} from '../services/api.service';
+
 @Component({
   selector: 'app-detail-rapport',
   templateUrl: './detail-rapport.page.html',
@@ -39,13 +30,8 @@ import { Capacitor } from '@capacitor/core';
     IonToolbar,
     CommonModule,
     FormsModule,
-    RouterLink,
-    RouterLinkActive,
-    IonBackButton,
     IonButtons,
     IonItem,
-    IonIcon,
-    IonButton,
     IonMenuButton,
     IonList,
     IonLabel,

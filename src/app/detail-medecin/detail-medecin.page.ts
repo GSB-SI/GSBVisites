@@ -157,5 +157,4 @@ export class DetailMedecinPage implements OnInit {
     // Ajoute le marker à la carte
     marker.addTo(this.map);
   }
-
 }

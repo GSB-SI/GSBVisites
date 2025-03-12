@@ -24,12 +24,6 @@ export const routes: Routes = [
     path: 'detail-medecin/:id',
     loadComponent: () => import('./detail-medecin/detail-medecin.page').then(m => m.DetailMedecinPage)
   },
-
-    loadComponent: () =>
-      import('./medecins-du-departement/medecins-du-departement.page').then(
-        (m) => m.MedecinsDuDepartementPage
-      ),
-  },
   {
     path: 'mes-rapports',
     loadComponent: () =>
@@ -42,5 +36,10 @@ export const routes: Routes = [
         (m) => m.DetailRapportPage
       ),
   },
+  {
+    path: 'create-rapport',
+    loadComponent: () => import('./create-rapport/create-rapport.page').then(m => m.CreateRapportPage)
+  },
+
 
 ];
