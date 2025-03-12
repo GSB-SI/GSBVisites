@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button routerLink="/medecins-du-departement">
+        <ion-icon name="arrow-back-sharp" slot="start"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Détail médecin</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ medecin.name }} {{ medecin.firstName }}</ion-card-title>
+      <ion-card-subtitle>{{ medecin.speciality }}</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>{{ medecin.address }}</p>
+      <p>Département : {{ medecin.department }}</p>
+      <p>Téléphone : {{ medecin.phone }}</p>
+
+      <ion-button (click)="callMedecin(medecin.phone)" color="primary">
+        <ion-icon name="call-sharp" slot="start"></ion-icon>
+        Appeler
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+  <ion-card>
+    <div id="map"></div>
+  </ion-card>
+</ion-content>
