@@ -1,0 +1,28 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Mes rapports de visites</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list lines="full">
+    <ion-item
+      button
+      *ngFor="let rapport of rapports"
+      detail="true"
+      [routerLink]="['/detail-rapport', rapport._id]"
+    >
+      <ion-label>
+        <h3 class="ion-text-wrap">
+          {{ rapport.date }} - {{rapport.doctorName}}
+        </h3>
+        <p class="ion-text-wrap">{{rapport.reason}}</p>
+        <br />
+        <i class="ion-text-wrap">{{rapport.summary}}</i>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

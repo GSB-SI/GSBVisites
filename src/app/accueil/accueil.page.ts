@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonButton,
   IonButtons,
+  IonContent,
+  IonHeader,
   IonMenuButton,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { ApiService } from '../services/api.service';
+import { Router, RouterLink } from '@angular/router';
+import { IonicModule, ToastController } from '@ionic/angular';
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'app-accueil',
   templateUrl: './accueil.page.html',
@@ -25,11 +29,34 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     IonButtons,
     IonMenuButton,
     RouterLink,
-    RouterLinkActive,
   ],
 })
 export class AccueilPage implements OnInit {
-  constructor() {}
+  constructor(
+    private toastController: ToastController,
+    private api: ApiService,
+    private router: Router
+  ) {}
 
   ngOnInit() {}
+
+  ionViewWillEnter() {
+    if (!this.api.accountInfos.accessToken) {
+      this.afficheToast(
+        'Délai expiré. Vous devez vous reconnecter',
+        3000,
+        'middle'
+      );
+      this.router.navigate(['/login']);
+    }
+  }
+
+  async afficheToast(message: string, duree: number, position: any) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: duree,
+      position: position,
+    });
+    await toast.present();
+  }
 }
