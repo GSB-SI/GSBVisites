@@ -5,8 +5,10 @@ import {ApiService} from "../services/api.service";
 import {Router, RouterLink} from "@angular/router";
 import {IonicModule, ToastController} from "@ionic/angular";
 import {environment} from "../../environments/environment";
+
 import {addIcons} from "ionicons";
 import {homeSharp, phonePortraitSharp} from "ionicons/icons";
+
 
 @Component({
   selector: 'app-medecins-du-departement',
@@ -16,6 +18,7 @@ import {homeSharp, phonePortraitSharp} from "ionicons/icons";
   imports: [CommonModule, FormsModule, IonicModule, RouterLink]
 })
 
+
 export class MedecinsDuDepartementPage {
   public medecins: any[];
   public medecinsFiltres: any[];
@@ -24,17 +27,20 @@ export class MedecinsDuDepartementPage {
   protected readonly JSON = JSON;
   public filtre: string;
 
+
   constructor(
     private toastController: ToastController,
     private api: ApiService,
     private router: Router
   ) {
+
     addIcons({phonePortraitSharp, homeSharp})
 
     this.medecins = [];
     this.medecinsFiltres = [];
     this.department = this.api.accountInfos.user.department;
     this.filtre = '';
+
   }
 
   ionViewWillEnter() {
@@ -54,6 +60,7 @@ export class MedecinsDuDepartementPage {
     await toast.present();
   }
 
+
   public filtrerParNom(event: any) {
     let valeurCherchee = event.detail.value || '';
     if (!valeurCherchee) {
@@ -67,13 +74,16 @@ export class MedecinsDuDepartementPage {
     this.medecinsFiltres = this.medecins;
   }
 
+
   private remplirListeMedecins() {
     this.api.getLesMedecins().subscribe({
       next: (reponse: any) => {
         // *** réponse OK (statut 200) : authentification réussie
         if (reponse.status == 200) {
+
           this.medecins = reponse.data;
           // Récupère la liste des medecins
+
           this.medecinsFiltres = reponse.data.filter((medec: any) => {
             return medec.department.toString() === this.api.accountInfos.user.department.toString();
           })
@@ -109,4 +119,5 @@ export class MedecinsDuDepartementPage {
       return nameMatch || firstNameMatch;
     });
   }
+
 }

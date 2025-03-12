@@ -54,10 +54,14 @@ export class AppComponent {
   public isMenuDisabled = false;
   public appPages = [
     { title: 'Accueil', url: '/accueil', icon: 'home' },
-    { title: 'Mes rapports de visite', url: '', icon: 'document-text' },
+    {
+      title: 'Mes rapports de visite',
+      url: 'mes-rapports',
+      icon: 'document-text',
+    },
     {
       title: 'Médecins du département',
-      url: '',
+      url: '/medecins-du-departement',
       icon: 'people',
     },
     { title: 'Les médicaments', url: '', icon: 'medkit' },

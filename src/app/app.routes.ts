@@ -17,6 +17,7 @@ export const routes: Routes = [
   },
   {
     path: 'medecins-du-departement',
+
     loadComponent: () => import('./medecins-du-departement/medecins-du-departement.page').then(m => m.MedecinsDuDepartementPage)
   },
   {
@@ -24,5 +25,22 @@ export const routes: Routes = [
     loadComponent: () => import('./detail-medecin/detail-medecin.page').then(m => m.DetailMedecinPage)
   },
 
+    loadComponent: () =>
+      import('./medecins-du-departement/medecins-du-departement.page').then(
+        (m) => m.MedecinsDuDepartementPage
+      ),
+  },
+  {
+    path: 'mes-rapports',
+    loadComponent: () =>
+      import('./mes-rapports/mes-rapports.page').then((m) => m.MesRapportsPage),
+  },
+  {
+    path: 'detail-rapport/:id',
+    loadComponent: () =>
+      import('./detail-rapport/detail-rapport.page').then(
+        (m) => m.DetailRapportPage
+      ),
+  },
 
 ];
