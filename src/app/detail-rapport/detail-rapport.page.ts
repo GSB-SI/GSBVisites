@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, inject, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+
 import {
   IonContent,
   IonHeader,
@@ -56,14 +57,13 @@ export class DetailRapportPage implements OnInit, OnDestroy {
   private toastController = inject(ToastController);
   private api = inject(ApiService);
 
-  public rapport!: Rapport;
+  public rapport!: any;
   public apiUrl = `${environment.baseUrl}`;
   public isFavorite = false;
   constructor() {}
 
   async ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
-
     this.api.getUnRapport(id).subscribe({
       next: async (reponse: any) => {
         // *** réponse OK (statut 200) : authentification réussie
@@ -139,4 +139,6 @@ export class DetailRapportPage implements OnInit, OnDestroy {
     });
     toast.present();
   }
+
+  protected readonly JSON = JSON;
 }
