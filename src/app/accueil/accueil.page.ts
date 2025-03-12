@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {
   IonButton,
   IonButtons,
@@ -9,10 +9,12 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
+
 import { ApiService } from '../services/api.service';
 import { Router, RouterLink } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
+
 
 @Component({
   selector: 'app-accueil',
@@ -32,6 +34,7 @@ import { environment } from '../../environments/environment';
   ],
 })
 export class AccueilPage implements OnInit {
+
   constructor(
     private toastController: ToastController,
     private api: ApiService,
