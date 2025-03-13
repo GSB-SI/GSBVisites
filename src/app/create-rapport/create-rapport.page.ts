@@ -23,6 +23,7 @@ import {
 } from '@ionic/angular/standalone';
 import {ApiService} from '../services/api.service';
 import {Router} from '@angular/router';
+import {ToastController} from "@ionic/angular";
 
 @Component({
   selector: 'app-create-rapport',
@@ -35,6 +36,7 @@ export class CreateRapportPage {
   rapport: any = {
     userId: null,
     doctorId: null,
+    doctorName: null,
     date: '',
     reason: '',
     summary: '',
@@ -46,9 +48,54 @@ export class CreateRapportPage {
     quantity: null
   };
 
+  isDateModalOpen: boolean = false;
+  isMedecinModalOpen: boolean = false;
+  isMotifModalOpen: boolean = false;
   isMedicamentModalOpen: boolean = false;
 
-  constructor(private apiService: ApiService, private router: Router) {
+  tempDate: string = '';
+  selectedDoctor: any = null;
+  selectedMedicine: any = null;
+  selectedMotif: string = '';
+
+  doctors: any[] = [];
+  reasons: any[] = [];
+  medicines: any[] = [];
+
+  constructor(private apiService: ApiService, private router: Router, private toastController: ToastController) {
+  }
+
+  ionViewWillEnter() {
+    if (!this.apiService.accountInfos.accessToken) {
+      this.afficheToast('Délai expiré. Vous devez vous reconnecter', 3000, 'middle');
+      this.router.navigate(['/login']);
+    }
+    this.remplirListeMedecins();
+    this.remplirListeMedicaments();
+    this.remplirListeRaisons();
+  }
+
+  async afficheToast(message: string, duree: number, position: any) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: duree,
+      position: position,
+    });
+    await toast.present();
+  }
+
+  openDateModal() {
+    this.tempDate = this.rapport.date || '';
+    this.isDateModalOpen = true;
+  }
+
+  closeDateModal() {
+    this.isDateModalOpen = false;
+  }
+
+  confirmDateSelection() {
+    this.rapport.date = this.tempDate;
+    this.closeDateModal();
   }
 
   onSubmit() {
@@ -70,12 +117,87 @@ export class CreateRapportPage {
     this.router.navigate(['/accueil']);
   }
 
-  openMedecinPopup() {
-    this.rapport.doctorId = "67a62cd8608e504a7685936c";
+  /* ======== Fonctions pour la modal médecin ======== */
+  openMedecinModal() {
+    this.isMedecinModalOpen = true;
   }
 
-  openMotifPopup() {
-    this.rapport.reason = 'Consultation';
+  closeMedecinModal() {
+    this.isMedecinModalOpen = false;
+  }
+
+  selectDoctor(doc: any) {
+    this.selectedDoctor = doc;
+    this.confirmMedecinSelection()
+  }
+
+  confirmMedecinSelection() {
+    if (this.selectedDoctor) {
+      this.rapport.doctorId = this.selectedDoctor._id;
+      this.rapport.doctorName = this.selectedDoctor.name;
+      this.closeMedecinModal();
+    } else {
+      console.error('Aucun médecin sélectionné');
+    }
+  }
+
+  openMotifModal() {
+    this.isMotifModalOpen = true;
+  }
+
+  closeMotifModal() {
+    this.isMotifModalOpen = false;
+  }
+
+  selectMotif(motif: any) {
+    this.selectedMotif = motif.label;
+    this.confirmMotifSelection();
+  }
+
+  confirmMotifSelection() {
+    if (this.selectedMotif) {
+      this.rapport.reason = this.selectedMotif;
+      this.closeMotifModal();
+    } else {
+      console.error('Aucun motif sélectionné');
+    }
+  }
+
+  selectMedicine(medicine: any) {
+    this.selectedMedicine = medicine;
+    this.rapportSpecimens.medicineId = medicine._id;
+  }
+
+  confirmMedicineSelection() {
+    if (this.rapportSpecimens.medicineId && this.rapportSpecimens.quantity > 0) {
+      this.rapport.specimens.push({...this.rapportSpecimens});
+      this.closeOffreMedicamentModal();
+    } else {
+      console.error('Veuillez sélectionner un médicament et entrer une quantité');
+    }
+  }
+
+  private remplirListeMedecins() {
+    this.apiService.getLesMedecins().subscribe({
+      next: (reponse: any) => {
+        if (reponse.status == 200) {
+          this.doctors = reponse.data;
+        } else if (reponse.status == '401') {
+          if (reponse.data.description == "Le jeton d’accès a expiré") {
+            this.afficheToast('Délai expiré. Vous devez vous reconnecter', 3000, 'middle');
+            this.router.navigate(['/login']);
+          } else {
+            this.afficheToast("Un problème est survenu. Contactez l'administrateur", 3000, 'middle');
+          }
+        } else {
+          this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+          console.log(reponse);
+        }
+      },
+      error: () => {
+        this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+      },
+    });
   }
 
   openOffreMedicamentModal() {
@@ -86,17 +208,49 @@ export class CreateRapportPage {
     this.isMedicamentModalOpen = false;
   }
 
-  openListeMedicamentsPopup() {
-    this.rapportSpecimens.medicineId = "67a62cf5608e504a76859756";
+  private remplirListeMedicaments() {
+    this.apiService.getLesMedicaments().subscribe({
+      next: (reponse: any) => {
+        if (reponse.status == 200) {
+          this.medicines = reponse.data;
+        } else if (reponse.status == '401') {
+          if (reponse.data.description == "Le jeton d’accès a expiré") {
+            this.afficheToast('Délai expiré. Vous devez vous reconnecter', 3000, 'middle');
+            this.router.navigate(['/login']);
+          } else {
+            this.afficheToast("Un problème est survenu. Contactez l'administrateur", 3000, 'middle');
+          }
+        } else {
+          this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+          console.log(reponse);
+        }
+      },
+      error: () => {
+        this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+      },
+    });
   }
 
-  validerOffreMedicament() {
-    if (this.rapportSpecimens.medicineId && this.rapportSpecimens.quantity) {
-      this.rapport.specimens.push({...this.rapportSpecimens});
-      this.rapportSpecimens = {medicineId: null, quantity: null};
-      this.closeOffreMedicamentModal();
-    } else {
-      console.error('Veuillez sélectionner un médicament et entrer une quantité');
-    }
+  private remplirListeRaisons() {
+    this.apiService.getLesRaisons().subscribe({
+      next: (reponse: any) => {
+        if (reponse.status == 200) {
+          this.reasons = reponse.data;
+        } else if (reponse.status == '401') {
+          if (reponse.data.description == "Le jeton d’accès a expiré") {
+            this.afficheToast('Délai expiré. Vous devez vous reconnecter', 3000, 'middle');
+            this.router.navigate(['/login']);
+          } else {
+            this.afficheToast("Un problème est survenu. Contactez l'administrateur", 3000, 'middle');
+          }
+        } else {
+          this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+          console.log(reponse);
+        }
+      },
+      error: () => {
+        this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+      },
+    });
   }
 }

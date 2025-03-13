@@ -79,6 +79,31 @@ export class ApiService {
     );
   }
 
+  getLesRaisons(args?: any) {
+    const options = {
+      url: `${this.apiUrl}/reasons`,
+      headers: {
+        'Authorization': 'Bearer ' + this.accountInfos.accessToken,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      params: args,
+    };
+    if (!args) {
+      delete options.params;
+    }
+    return from(
+      CapacitorHttp.get(options)
+        .then((res) => {
+          return res;
+        })
+        .catch((error) => {
+          console.error('Error in CapacitorHttp.post:', error);
+          throw error;
+        })
+    );
+  }
+
   getUnMedecin(id: any) {
     const options = {
       url: `${this.apiUrl}/doctors/${id}`,

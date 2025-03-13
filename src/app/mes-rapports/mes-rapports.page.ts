@@ -18,6 +18,8 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
+import {addIcons} from "ionicons";
+import {addSharp} from "ionicons/icons";
 
 @Component({
   selector: 'app-mes-rapports',
@@ -51,6 +53,8 @@ export class MesRapportsPage implements OnInit {
     protected router: Router
   ) {
     this.rapports = [];
+
+    addIcons({addSharp})
   }
 
   ngOnInit() {}
