@@ -1,38 +1,26 @@
 import { Component, OnInit, OnDestroy, inject, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import {
   IonContent,
   IonHeader,
   IonTitle,
   IonToolbar,
-  IonBackButton,
-  IonButtons,
-  IonItem,
-  IonIcon,
-  IonButton,
-  IonLabel,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
 } from '@ionic/angular/standalone';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { addIcons } from 'ionicons';
 import {
-  pencilSharp,
-  pencilOutline,
-  trashOutline,
-  trashSharp,
-} from 'ionicons/icons';
+  Router,
+  RouterLink,
+  RouterLinkActive,
+  ActivatedRoute,
+} from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
 import { ApiService } from '../services/api.service';
+
 @Component({
-  selector: 'app-detail-rapport',
-  templateUrl: './detail-rapport.page.html',
-  styleUrls: ['./detail-rapport.page.scss'],
+  selector: 'app-update-rapport',
+  templateUrl: './update-rapport.page.html',
+  styleUrls: ['./update-rapport.page.scss'],
   standalone: true,
   imports: [
     IonContent,
@@ -41,20 +29,9 @@ import { ApiService } from '../services/api.service';
     IonToolbar,
     CommonModule,
     FormsModule,
-    RouterLink,
-    IonBackButton,
-    IonButtons,
-    IonItem,
-    IonIcon,
-    IonButton,
-    IonLabel,
-    IonCard,
-    IonCardContent,
-    IonCardHeader,
-    IonCardTitle,
   ],
 })
-export class DetailRapportPage implements OnInit, OnDestroy {
+export class UpdateRapportPage implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private toastController = inject(ToastController);
@@ -62,14 +39,7 @@ export class DetailRapportPage implements OnInit, OnDestroy {
 
   public rapport!: any;
   public apiUrl = `${environment.baseUrl}`;
-  constructor() {
-    addIcons({
-      pencilSharp,
-      pencilOutline,
-      trashOutline,
-      trashSharp,
-    });
-  }
+  constructor() {}
 
   async ngOnInit() {
     const id = this.activatedRoute.snapshot.paramMap.get('id');
@@ -120,7 +90,6 @@ export class DetailRapportPage implements OnInit, OnDestroy {
       },
     });
   }
-  ngOnDestroy() {}
 
   async afficheToast(message: string, duree: number, position: any) {
     const toast = await this.toastController.create({
@@ -148,6 +117,4 @@ export class DetailRapportPage implements OnInit, OnDestroy {
     });
     toast.present();
   }
-
-  protected readonly JSON = JSON;
 }
