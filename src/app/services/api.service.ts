@@ -1,9 +1,7 @@
-
 import { Injectable } from '@angular/core';
 import { CapacitorHttp } from '@capacitor/core';
 import { from, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-
 
 @Injectable({
   providedIn: 'root',
@@ -20,7 +18,7 @@ export class ApiService {
       firstName: '',
       username: '',
       hireDate: '',
-      department: ''
+      department: '',
     };
   }
 
@@ -40,7 +38,7 @@ export class ApiService {
       CapacitorHttp.post(options)
         .then((res) => {
           this.accountInfos.accessToken = res.data.accessToken;
-          this.accountInfos.idUser = res.data.user._id;
+          this.accountInfos.userId = res.data.user._id;
           this.accountInfos.name = res.data.user.name;
           this.accountInfos.username = res.data.user.username;
           this.accountInfos.hireDate = res.data.user.hireDate;
@@ -59,9 +57,9 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/doctors`,
       headers: {
-        'Authorization': 'Bearer ' + this.accountInfos.accessToken,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
       params: args,
     };
