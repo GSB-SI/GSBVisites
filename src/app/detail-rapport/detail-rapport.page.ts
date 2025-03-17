@@ -1,14 +1,11 @@
-import { Component, OnInit, OnDestroy, inject, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
 
 import {
+  IonButtons,
   IonContent,
   IonHeader,
-  IonTitle,
-  IonToolbar,
-  IonBackButton,
-  IonButtons,
   IonItem,
   IonIcon,
   IonButton,
