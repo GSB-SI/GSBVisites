@@ -1,21 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ApiService } from '../services/api.service';
-import { Router, RouterLink } from '@angular/router';
-import { ToastController } from '@ionic/angular';
-import { environment } from '../../environments/environment';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {ApiService} from '../services/api.service';
+import {Router, RouterLink} from '@angular/router';
+import {ToastController} from '@ionic/angular';
+import {environment} from '../../environments/environment';
 import {
   IonButtons,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonHeader,
-  IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonMenuButton,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
@@ -41,9 +39,7 @@ import {addSharp} from "ionicons/icons";
     CommonModule,
     FormsModule,
     RouterLink,
-    IonFab,
-    IonFabButton,
-    IonIcon,
+    IonSearchbar,
   ],
 })
 export class MesRapportsPage implements OnInit {
