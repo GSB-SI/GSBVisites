@@ -3,6 +3,7 @@ import { CapacitorHttp } from '@capacitor/core';
 import { from, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -78,6 +79,31 @@ export class ApiService {
     );
   }
 
+  getLesRaisons(args?: any) {
+    const options = {
+      url: `${this.apiUrl}/reasons`,
+      headers: {
+        'Authorization': 'Bearer ' + this.accountInfos.accessToken,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      params: args,
+    };
+    if (!args) {
+      delete options.params;
+    }
+    return from(
+      CapacitorHttp.get(options)
+        .then((res) => {
+          return res;
+        })
+        .catch((error) => {
+          console.error('Error in CapacitorHttp.post:', error);
+          throw error;
+        })
+    );
+  }
+
   getUnMedecin(id: any) {
     const options = {
       url: `${this.apiUrl}/doctors/${id}`,
@@ -106,6 +132,31 @@ export class ApiService {
   getLesRapports(args?: any) {
     const options = {
       url: `${this.apiUrl}/reports`,
+      headers: {
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+      },
+      params: args,
+    };
+    if (!args) {
+      delete options.params;
+    }
+    return from(
+      CapacitorHttp.get(options)
+        .then((res) => {
+          return res;
+        })
+        .catch((error) => {
+          console.error('Error in CapacitorHttp.post:', error);
+          throw error;
+        })
+    );
+  }
+
+  getLesMedicaments(args?: any) {
+    const options = {
+      url: `${this.apiUrl}/medicines`,
       headers: {
         Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
@@ -182,9 +233,9 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/reports`,
       headers: {
-        Authorization: 'Bearer ' + this.accountInfos.accessToken,
+        'Authorization': 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
-        Accept: 'application/json',
+        'Accept': 'application/json',
       },
       data: args,
     };

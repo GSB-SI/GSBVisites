@@ -1,9 +1,12 @@
-
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
     <ion-title>Médecins du départements ({{ department }})</ion-title>
   </ion-toolbar>
 </ion-header>
+
 <ion-content>
   <ion-searchbar (ionClear)="annulerFiltre()" (ionInput)="filtrerParNom($event)" [(ngModel)]="filtre"
                  [debounce]="1000" show-clear-button="always"></ion-searchbar>

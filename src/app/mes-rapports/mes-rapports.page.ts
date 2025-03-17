@@ -6,17 +6,22 @@ import { Router, RouterLink } from '@angular/router';
 import { ToastController } from '@ionic/angular';
 import { environment } from '../../environments/environment';
 import {
-  IonContent,
-  IonHeader,
-  IonTitle,
-  IonToolbar,
   IonButtons,
-  IonMenuButton,
-  IonList,
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonHeader,
+  IonIcon,
   IonItem,
   IonLabel,
-  IonSearchbar,
+  IonList,
+  IonMenuButton,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
+import {addIcons} from "ionicons";
+import {addSharp} from "ionicons/icons";
+
 
 @Component({
   selector: 'app-mes-rapports',
@@ -32,15 +37,18 @@ import {
     IonMenuButton,
     IonList,
     IonItem,
-    IonSearchbar,
     IonLabel,
     CommonModule,
     FormsModule,
     RouterLink,
+    IonFab,
+    IonFabButton,
+    IonIcon,
   ],
 })
 export class MesRapportsPage implements OnInit {
   public rapports: any[];
+
   public rapportsFiltres: any[];
   public apiUrl = `${environment.baseUrl}`;
   public filtreDate: string;
@@ -49,9 +57,10 @@ export class MesRapportsPage implements OnInit {
   constructor(
     private toastController: ToastController,
     private api: ApiService,
-    private router: Router
+    protected router: Router
   ) {
     this.rapports = [];
+    addIcons({addSharp})
     this.rapportsFiltres = [];
     this.filtreDate = '';
     this.filtreNom = '';

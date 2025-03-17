@@ -26,6 +26,7 @@
     placeholder="Recherche par nom"
   >
   </ion-searchbar>
+
   <ion-list lines="full">
     <ion-item
       button
@@ -35,11 +36,11 @@
     >
       <ion-label>
         <h3 class="ion-text-wrap">
-          {{ rapport.date }} - {{rapport.doctorName}}
+          {{ rapport.date }} - {{ rapport.doctorName }}
         </h3>
-        <p class="ion-text-wrap">{{rapport.reason}}</p>
-        <br />
-        <i class="ion-text-wrap">{{rapport.summary}}</i>
+        <p class="ion-text-wrap">{{ rapport.reason }}</p>
+        <br/>
+        <i class="ion-text-wrap">{{ rapport.summary }}</i>
       </ion-label>
     </ion-item>
   </ion-list>
