@@ -8,15 +8,29 @@
 </ion-header>
 
 <ion-content>
-  <ion-fab horizontal="end" slot="fixed" vertical="bottom">
-    <ion-fab-button>
-      <ion-icon (click)="router.navigate(['/create-rapport'])" name="add-sharp"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
+  <ion-searchbar
+    show-clear-button="always"
+    [debounce]="1000"
+    (ionInput)="filtrerParDate($event)"
+    (ionClear)="effacerSelection()"
+    [(ngModel)]="filtreDate"
+    placeholder="Recherche par date"
+  >
+  </ion-searchbar>
+  <ion-searchbar
+    show-clear-button="always"
+    [debounce]="1000"
+    (ionInput)="filtrerParNom($event)"
+    (ionClear)="effacerSelection()"
+    [(ngModel)]="filtreNom"
+    placeholder="Recherche par nom"
+  >
+  </ion-searchbar>
+
   <ion-list lines="full">
     <ion-item
       button
-      *ngFor="let rapport of rapports"
+      *ngFor="let rapport of rapportsFiltres"
       detail="true"
       [routerLink]="['/detail-rapport', rapport._id]"
     >

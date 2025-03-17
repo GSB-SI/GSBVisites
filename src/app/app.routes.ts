@@ -1,4 +1,4 @@
-import {Routes} from '@angular/router';
+import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
@@ -18,10 +18,14 @@ export const routes: Routes = [
   {
     path: 'medecins-du-departement',
 
-    loadComponent: () => import('./medecins-du-departement/medecins-du-departement.page').then(m => m.MedecinsDuDepartementPage)
+    loadComponent: () =>
+      import('./medecins-du-departement/medecins-du-departement.page').then(
+        (m) => m.MedecinsDuDepartementPage
+      ),
   },
   {
     path: 'detail-medecin/:id',
+
     loadComponent: () => import('./detail-medecin/detail-medecin.page').then(m => m.DetailMedecinPage)
   },
   {
@@ -39,6 +43,13 @@ export const routes: Routes = [
   {
     path: 'create-rapport',
     loadComponent: () => import('./create-rapport/create-rapport.page').then(m => m.CreateRapportPage)
+  },{
+    path: 'update-rapport/:id',
+    loadComponent: () => import('./update-rapport/update-rapport.page').then( m => m.UpdateRapportPage)
+  },
+  {
+    path: 'delete-rapport/:id',
+    loadComponent: () => import('./delete-rapport/delete-rapport.page').then( m => m.DeleteRapportPage)
   },
 
 

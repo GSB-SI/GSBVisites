@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {FormsModule} from '@angular/forms';
-import {ApiService} from '../services/api.service';
-import {Router, RouterLink} from '@angular/router';
-import {ToastController} from '@ionic/angular';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ApiService } from '../services/api.service';
+import { Router, RouterLink } from '@angular/router';
+import { ToastController } from '@ionic/angular';
+import { environment } from '../../environments/environment';
 import {
   IonButtons,
   IonContent,
@@ -20,6 +21,7 @@ import {
 } from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
 import {addSharp} from "ionicons/icons";
+
 
 @Component({
   selector: 'app-mes-rapports',
@@ -47,14 +49,21 @@ import {addSharp} from "ionicons/icons";
 export class MesRapportsPage implements OnInit {
   public rapports: any[];
 
+  public rapportsFiltres: any[];
+  public apiUrl = `${environment.baseUrl}`;
+  public filtreDate: string;
+  public filtreNom: string;
+
   constructor(
     private toastController: ToastController,
     private api: ApiService,
     protected router: Router
   ) {
     this.rapports = [];
-
     addIcons({addSharp})
+    this.rapportsFiltres = [];
+    this.filtreDate = '';
+    this.filtreNom = '';
   }
 
   ngOnInit() {}
@@ -86,6 +95,15 @@ export class MesRapportsPage implements OnInit {
         if (reponse.status == 200) {
           console.log(reponse.data);
           this.rapports = reponse.data;
+          if (this.filtreDate) {
+            this.filtrerParDate(this.filtreDate);
+          } else {
+            if (this.filtreNom) {
+              this.filtrerParNom(this.filtreNom);
+            } else {
+              this.rapportsFiltres = this.rapports;
+            }
+          }
           this.api.getLesMedecins().subscribe((medecins: any) => {
             this.rapports.forEach((rapport: any) => {
               const leMedecin = medecins.data.find(
@@ -93,7 +111,7 @@ export class MesRapportsPage implements OnInit {
               );
 
               if (leMedecin) {
-                rapport.doctorName = leMedecin.firstName + ' ' + leMedecin.name;
+                rapport.doctorName = leMedecin.name + ' ' + leMedecin.firstName;
               }
             });
           });
@@ -131,5 +149,64 @@ export class MesRapportsPage implements OnInit {
         );
       },
     });
+  }
+
+  filtrerParDate(event: any) {
+    // Récupère la valeur saisie dans la barre de recherche
+    let valeurCherchee = event.detail.value || '';
+    // Aucune valeur cherchée, on récupère toutes les offres
+    if (!valeurCherchee) {
+      this.rapportsFiltres = this.rapports;
+    } else {
+      this.filtrerLesRapports(valeurCherchee);
+    }
+    valeurCherchee = valeurCherchee.toLowerCase().trim();
+    // Filtrer les offres
+    this.rapportsFiltres = this.rapports.filter((rapport) => {
+      // Vérifie si l'adresse de départ contient la valeur cherchée
+      const dateMatch = rapport.date.toLowerCase().includes(valeurCherchee);
+      // Si une condition est remplie, l'offre est ajoutée à la liste des offres filtrées
+      return dateMatch;
+    });
+  }
+
+  filtrerParNom(event: any) {
+    // Récupère la valeur saisie dans la barre de recherche
+    let valeurCherchee = event.detail.value || '';
+    // Aucune valeur cherchée, on récupère toutes les offres
+    if (!valeurCherchee) {
+      this.rapportsFiltres = this.rapports;
+    } else {
+      this.filtrerLesRapports(valeurCherchee);
+    }
+    valeurCherchee = valeurCherchee.toLowerCase().trim();
+    // Filtrer les offres
+    this.rapportsFiltres = this.rapports.filter((rapport) => {
+      // Vérifie si l'adresse de départ contient la valeur cherchée
+      const dateMatch = rapport.doctorName
+        .toLowerCase()
+        .includes(valeurCherchee);
+      // Si une condition est remplie, l'offre est ajoutée à la liste des offres filtrées
+      return dateMatch;
+    });
+  }
+
+  filtrerLesRapports(valeurCherchee: string) {
+    valeurCherchee = valeurCherchee.toLowerCase().trim();
+    // Filtrer les offres
+    this.rapportsFiltres = this.rapports.filter((rapport) => {
+      // Vérifie si l'adresse de départ contient la valeur cherchée
+      const nameMatch = rapport.doctorName
+        .toLowerCase()
+        .includes(valeurCherchee);
+      // Vérifie si l'un des lieux de remassage contient la valeur cherchée
+      const dateMatch = rapport.date.toLowerCase().includes(valeurCherchee);
+      // Si l'une des conditions est remplie, l'offre est ajoutée à la liste des offres filtrées;
+      return nameMatch || dateMatch;
+    });
+  }
+
+  effacerSelection() {
+    this.rapportsFiltres = this.rapports;
   }
 }
