@@ -125,4 +125,19 @@ export class DetailRapportPage implements OnInit {
     });
     await toast.present();
   }
+
+  async supp(){
+      this.rapport.userId = this.api.accountInfos.user._id;
+
+      this.api.deleteUnRapport(this.rapport._id).subscribe({
+        next: (res) => {
+          console.log('Rapport supprimé avec succès', res);
+          this.router.navigate(['/mes-rapports']);
+          this.afficheToast('Rapport supprimé avec succès !', 5000, 'bottom');
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression du rapport', err);
+        },
+      });
+  }
 }

@@ -16,6 +16,9 @@ import {
   IonSearchbar,
   IonTitle,
   IonToolbar,
+  IonIcon,
+  IonFab,
+  IonFabButton,
 } from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
 import {addSharp} from "ionicons/icons";
@@ -40,6 +43,9 @@ import {addSharp} from "ionicons/icons";
     FormsModule,
     RouterLink,
     IonSearchbar,
+    IonIcon,
+    IonFab,
+    IonFabButton
   ],
 })
 export class MesRapportsPage implements OnInit {
@@ -89,7 +95,6 @@ export class MesRapportsPage implements OnInit {
     this.api.getMesRapports(this.api.accountInfos.user._id).subscribe({
       next: async (reponse: any) => {
         if (reponse.status == 200) {
-          console.log(reponse.data);
           this.rapports = reponse.data;
           if (this.filtreDate) {
             this.filtrerParDate(this.filtreDate);
