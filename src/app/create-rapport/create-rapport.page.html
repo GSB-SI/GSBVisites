@@ -57,8 +57,17 @@
         detail="false"
       >
         <ion-label>
-          <i>id: {{ specimen.medicineId }} - qte: {{ specimen.quantity }}</i>
+          <i>{{ specimen.medicineId.commercialName }} - qte: {{ specimen.quantity }}</i>
         </ion-label>
+        <ion-button (click)="deleteSpecimen(specimen)" color="light">
+          <ion-icon
+            slot="icon-only"
+            name="trash-sharp"
+            ios="trash-outline"
+            md="trash-sharp"
+            color="secondary"
+          ></ion-icon>
+        </ion-button>
       </ion-item>
     </ion-list>
 

@@ -1,31 +1,29 @@
-import {Component, inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {FormsModule} from '@angular/forms';
 
 import {
-  IonButtons,
-  IonContent,
-  IonHeader,
-  IonItem,
-  IonIcon,
+  IonBackButton,
   IonButton,
-  IonLabel,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonTitle,
+  IonToolbar,
 } from '@ionic/angular/standalone';
-import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { addIcons } from 'ionicons';
-import {
-  pencilSharp,
-  pencilOutline,
-  trashOutline,
-  trashSharp,
-} from 'ionicons/icons';
-import { ToastController } from '@ionic/angular';
-import { environment } from 'src/environments/environment';
-import { ApiService } from '../services/api.service';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {addIcons} from 'ionicons';
+import {pencilOutline, pencilSharp, trashOutline, trashSharp,} from 'ionicons/icons';
+import {ApiService} from '../services/api.service';
+import {ToastController} from "@ionic/angular";
+
 @Component({
   selector: 'app-detail-rapport',
   templateUrl: './detail-rapport.page.html',
@@ -35,7 +33,6 @@ import { ApiService } from '../services/api.service';
     IonContent,
     IonHeader,
     IonTitle,
-    IonToolbar,
     CommonModule,
     FormsModule,
     RouterLink,
@@ -49,16 +46,17 @@ import { ApiService } from '../services/api.service';
     IonCardContent,
     IonCardHeader,
     IonCardTitle,
+    IonToolbar,
   ],
 })
-export class DetailRapportPage implements OnInit, OnDestroy {
+export class DetailRapportPage implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private toastController = inject(ToastController);
   private api = inject(ApiService);
 
   public rapport!: any;
-  public apiUrl = `${environment.baseUrl}`;
+
   constructor() {
     addIcons({
       pencilSharp,
@@ -84,14 +82,14 @@ export class DetailRapportPage implements OnInit, OnDestroy {
           // *** réponse PAS OK (statut 401) : unauthorised
         } else if (reponse.status == '401') {
           if (reponse.data.description == "Le jeton d'accès a expiré") {
-            this.afficheToast(
+            await this.afficheToast(
               'Délai expiré. Vous devez vous reconnecter',
               3000,
               'middle'
             );
-            this.router.navigate(['/login']);
+            await this.router.navigate(['/login']);
           } else {
-            this.afficheToast(
+            await this.afficheToast(
               "Un problème est survenu. Contactez l'administrateur",
               3000,
               'middle'
@@ -100,7 +98,7 @@ export class DetailRapportPage implements OnInit, OnDestroy {
           }
           // *** réponse PAS OK (autres erreurs)
         } else {
-          this.afficheToast(
+          await this.afficheToast(
             "Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit",
             5000,
             'middle'
@@ -117,7 +115,7 @@ export class DetailRapportPage implements OnInit, OnDestroy {
       },
     });
   }
-  ngOnDestroy() {}
+
 
   async afficheToast(message: string, duree: number, position: any) {
     const toast = await this.toastController.create({
@@ -128,23 +126,18 @@ export class DetailRapportPage implements OnInit, OnDestroy {
     await toast.present();
   }
 
-  async afficheToastAvecBouton(
-    leMessage: string,
-    laPosition: any,
-    texteBouton: string
-  ) {
-    const toast = await this.toastController.create({
-      message: leMessage,
-      position: laPosition,
-      buttons: [
-        {
-          text: texteBouton,
-          role: 'cancel',
-        },
-      ],
-    });
-    toast.present();
-  }
+  async supp(){
+      this.rapport.userId = this.api.accountInfos.user._id;
 
-  protected readonly JSON = JSON;
+      this.api.deleteUnRapport(this.rapport._id).subscribe({
+        next: (res) => {
+          console.log('Rapport supprimé avec succès', res);
+          this.router.navigate(['/mes-rapports']);
+          this.afficheToast('Rapport supprimé avec succès !', 5000, 'bottom');
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression du rapport', err);
+        },
+      });
+  }
 }

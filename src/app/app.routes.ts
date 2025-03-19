@@ -26,7 +26,10 @@ export const routes: Routes = [
   {
     path: 'detail-medecin/:id',
 
-    loadComponent: () => import('./detail-medecin/detail-medecin.page').then(m => m.DetailMedecinPage)
+    loadComponent: () =>
+      import('./detail-medecin/detail-medecin.page').then(
+        (m) => m.DetailMedecinPage
+      ),
   },
   {
     path: 'mes-rapports',
@@ -42,15 +45,16 @@ export const routes: Routes = [
   },
   {
     path: 'create-rapport',
-    loadComponent: () => import('./create-rapport/create-rapport.page').then(m => m.CreateRapportPage)
-  },{
-    path: 'update-rapport/:id',
-    loadComponent: () => import('./update-rapport/update-rapport.page').then( m => m.UpdateRapportPage)
+    loadComponent: () =>
+      import('./create-rapport/create-rapport.page').then(
+        (m) => m.CreateRapportPage
+      ),
   },
   {
-    path: 'delete-rapport/:id',
-    loadComponent: () => import('./delete-rapport/delete-rapport.page').then( m => m.DeleteRapportPage)
+    path: 'update-rapport/:id',
+    loadComponent: () =>
+      import('./update-rapport/update-rapport.page').then(
+        (m) => m.UpdateRapportPage
+      ),
   },
-
-
 ];
