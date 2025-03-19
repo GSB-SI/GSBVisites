@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Médecins du départements ({{ department }})</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-searchbar (ionClear)="annulerFiltre()" (ionInput)="filtrerParNom($event)" [(ngModel)]="filtre"
+                 [debounce]="1000" show-clear-button="always"></ion-searchbar>
+  <ion-list lines="full">
+    <ion-item *ngFor="let medecin of medecinsFiltres" [routerLink]="['/detail-medecin', medecin._id]" button
+              detail="true">
+      <ion-label>
+        <h3 class="ion-text-wrap"><strong>{{ medecin.name }} {{ medecin.firstName }}</strong> - {{ medecin.speciality }}
+        </h3>
+        <span class="ion-text-wrap"><ion-icon name="phone-portrait-sharp"></ion-icon>
+          {{ medecin.address }}</span> <br>
+        <span class="ion-text-wrap"><ion-icon name="home-sharp"></ion-icon>
+          {{ medecin.phone }}</span>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

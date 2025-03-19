@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  baseUrl: 'https://apigsb-visites.vercel.app',
+  openCageApiKey: '632780c5cf6c4c00b282a271baad4db9',
 };
 
 /*

@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Accueil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="home-bg"></div>
+  <div class="ion-margin-top ion-padding">
+    <ion-button
+      fill="outline"
+      shape="round"
+      expand="block"
+      class="ion-margin-top"
+      routerLink="/mes-rapports"
+      routerDirection="root"
+      >RAPPORTS VISITE</ion-button
+    >
+    <ion-button
+      fill="outline"
+      shape="round"
+      expand="block"
+      class="ion-margin-top"
+      routerLink="/medecins-du-departement"
+      routerDirection="root"
+      >MÉDECINS</ion-button
+    >
+    <ion-button
+      fill="outline"
+      shape="round"
+      expand="block"
+      class="ion-margin-top"
+      routerLink=""
+      routerDirection="root"
+      >MÉDICAMENTS</ion-button
+    >
+  </div>
+</ion-content>

@@ -2,12 +2,59 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    path: '',
+    redirectTo: 'login',
+    pathMatch: 'full',
   },
   {
-    path: '',
-    redirectTo: 'home',
-    pathMatch: 'full',
+    path: 'accueil',
+    loadComponent: () =>
+      import('./accueil/accueil.page').then((m) => m.AccueilPage),
+  },
+  {
+    path: 'login',
+    loadComponent: () => import('./login/login.page').then((m) => m.LoginPage),
+  },
+  {
+    path: 'medecins-du-departement',
+
+    loadComponent: () =>
+      import('./medecins-du-departement/medecins-du-departement.page').then(
+        (m) => m.MedecinsDuDepartementPage
+      ),
+  },
+  {
+    path: 'detail-medecin/:id',
+
+    loadComponent: () =>
+      import('./detail-medecin/detail-medecin.page').then(
+        (m) => m.DetailMedecinPage
+      ),
+  },
+  {
+    path: 'mes-rapports',
+    loadComponent: () =>
+      import('./mes-rapports/mes-rapports.page').then((m) => m.MesRapportsPage),
+  },
+  {
+    path: 'detail-rapport/:id',
+    loadComponent: () =>
+      import('./detail-rapport/detail-rapport.page').then(
+        (m) => m.DetailRapportPage
+      ),
+  },
+  {
+    path: 'create-rapport',
+    loadComponent: () =>
+      import('./create-rapport/create-rapport.page').then(
+        (m) => m.CreateRapportPage
+      ),
+  },
+  {
+    path: 'update-rapport/:id',
+    loadComponent: () =>
+      import('./update-rapport/update-rapport.page').then(
+        (m) => m.UpdateRapportPage
+      ),
   },
 ];

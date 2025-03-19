@@ -1,11 +1,81 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  IonApp,
+  IonSplitPane,
+  IonMenu,
+  IonContent,
+  IonList,
+  IonListHeader,
+  IonMenuToggle,
+  IonItem,
+  IonIcon,
+  IonLabel,
+  IonRouterOutlet,
+  IonRouterLink,
+} from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import {
+  homeSharp,
+  homeOutline,
+  documentTextSharp,
+  documentTextOutline,
+  peopleSharp,
+  peopleOutline,
+  medkitOutline,
+  medkitSharp,
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
-  imports: [IonApp, IonRouterOutlet],
+  styleUrls: ['app.component.scss'],
+  standalone: true,
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    CommonModule,
+    IonApp,
+    IonSplitPane,
+    IonMenu,
+    IonContent,
+    IonList,
+    IonListHeader,
+    IonMenuToggle,
+    IonItem,
+    IonIcon,
+    IonLabel,
+    IonRouterLink,
+    IonRouterOutlet,
+  ],
 })
 export class AppComponent {
-  constructor() {}
+  public isMenuDisabled = false;
+  public appPages = [
+    { title: 'Accueil', url: '/accueil', icon: 'home' },
+    {
+      title: 'Mes rapports de visite',
+      url: 'mes-rapports',
+      icon: 'document-text',
+    },
+    {
+      title: 'Médecins du département',
+      url: '/medecins-du-departement',
+      icon: 'people',
+    },
+    { title: 'Les médicaments', url: '', icon: 'medkit' },
+  ];
+  constructor() {
+    addIcons({
+      homeSharp,
+      homeOutline,
+      documentTextSharp,
+      documentTextOutline,
+      peopleSharp,
+      peopleOutline,
+      medkitSharp,
+      medkitOutline,
+    });
+  }
 }

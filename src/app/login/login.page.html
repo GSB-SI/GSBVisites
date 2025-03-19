@@ -1,0 +1,41 @@
+<ion-content [fullscreen]="true" scroll="false">
+  <div class="splash-bg"></div>
+  <div class="splash-info">
+    <div class="splash-logo"></div>
+  </div>
+  <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="ion-padding">
+    <ion-item>
+      <ion-label position="floating">Login</ion-label>
+      <ion-input formControlName="username" type="text"></ion-input>
+    </ion-item>
+    <ion-text
+      color="danger"
+      *ngIf="loginForm.get('username')?.invalid &&
+loginForm.get('username')?.touched"
+    >
+      Veuillez entrer votre login.
+    </ion-text>
+    <ion-item>
+      <ion-label position="floating">Mot de passe</ion-label>
+      <ion-input formControlName="password" type="password"></ion-input>
+    </ion-item>
+    <ion-text
+      color="danger"
+      *ngIf="loginForm.get('password')?.invalid &&
+loginForm.get('password')?.touched"
+    >
+      Veuillez entrer votre mot de passe.
+    </ion-text>
+    <ion-item>
+      <ion-checkbox
+        formControlName="remember"
+        position="floating"
+        justify="space-between"
+        >Se souvenir de moi</ion-checkbox
+      >
+    </ion-item>
+    <ion-button expand="full" type="submit" [disabled]="loginForm.invalid">
+      Se connecter
+    </ion-button>
+  </form>
+</ion-content>

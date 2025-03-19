@@ -1,0 +1,75 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Détail rapport de visite</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="rapport">
+    <ion-card-header>
+      <ion-card-title> Rapport du {{ rapport.date}} </ion-card-title>
+    </ion-card-header>
+    <ion-card-content class="ion-padding-vertical">
+      <ion-item>
+        <ion-label>
+          <h3>{{ rapport.doctorId.name}} {{rapport.doctorId.firstName}}</h3>
+          <p>{{rapport.doctorId.address}}</p>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>Motif</p>
+          <h3 class="ion-text-wrap">{{ rapport.reason }}</h3>
+        </ion-label>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          <p>Bilan</p>
+          <h3 class="ion-text-wrap">{{ rapport.summary}}</h3>
+        </ion-label>
+      </ion-item>
+      <ion-item *ngIf="rapport.specimens">
+        <ion-label>
+          <p>Échantillon(s)</p>
+          <h3
+            *ngFor="let specimen of rapport.specimens"
+            class="ion-text-wrap gsb-lieux"
+          >
+            - {{ specimen.quantity }} {{ specimen.medicineId.commercialName }}
+          </h3>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-button
+          routerLink="/update-rapport/{{rapport._id}}"
+          routerDirection="root"
+          color="primary"
+          ><ion-icon
+            slot="icon-only"
+            name="pencil-sharp"
+            ios="pencil-outline"
+            md="pencil-sharp"
+            color="light"
+          ></ion-icon>
+          &nbsp;MODIFIER</ion-button
+        >
+        <ion-button
+          (click)="supp()"
+          color="danger"
+          ><ion-icon
+            slot="icon-only"
+            name="trash-sharp"
+            ios="trash-outline"
+            md="trash-sharp"
+            color="light"
+          ></ion-icon>
+          &nbsp;SUPPRIMER</ion-button
+        >
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
