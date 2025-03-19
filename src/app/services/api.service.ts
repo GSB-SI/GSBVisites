@@ -3,7 +3,6 @@ import { CapacitorHttp } from '@capacitor/core';
 import { from, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
-
 @Injectable({
   providedIn: 'root',
 })
@@ -83,9 +82,9 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/reasons`,
       headers: {
-        'Authorization': 'Bearer ' + this.accountInfos.accessToken,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
       params: args,
     };
@@ -233,9 +232,9 @@ export class ApiService {
     const options = {
       url: `${this.apiUrl}/reports`,
       headers: {
-        'Authorization': 'Bearer ' + this.accountInfos.accessToken,
+        Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
       },
       data: args,
     };
@@ -254,18 +253,21 @@ export class ApiService {
     );
   }
 
-  updateUnRapport(id?: any) {
+  updateUnRapport(report?: any) {
     const options = {
-      url: `${this.apiUrl}/reports/${id}`,
+      url: `${this.apiUrl}/reports/${report._id}`,
+      method: 'PATCH',
       headers: {
         Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      params: id,
+      data: report,
     };
-    if (!id) {
-      delete options.params;
+    console.log(JSON.parse(JSON.stringify(options)));
+
+    if (!report._id) {
+      console.error('Error in Update');
     }
     return from(
       CapacitorHttp.patch(options)
@@ -282,15 +284,15 @@ export class ApiService {
   deleteUnRapport(id?: any) {
     const options = {
       url: `${this.apiUrl}/reports/${id}`,
+      method: 'DELETE',
       headers: {
         Authorization: 'Bearer ' + this.accountInfos.accessToken,
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      params: id,
     };
     if (!id) {
-      delete options.params;
+      console.error('Error in Delete');
     }
     return from(
       CapacitorHttp.delete(options)

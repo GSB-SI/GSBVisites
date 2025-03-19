@@ -1,13 +1,221 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
     <ion-title>Modification rapport de visite</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Modification rapport de visite</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <form #rapportForm="ngForm" (ngSubmit)="onSubmit()">
+    <ion-item (click)="openDateModal()" button>
+      <ion-label>Date</ion-label>
+      <ion-note slot="end">
+        {{ rapport.date ? rapport.date : 'Sélectionner une date' }}
+      </ion-note>
+    </ion-item>
+
+    <ion-item (click)="openMedecinModal()" button>
+      <ion-label>Médecin</ion-label>
+      <ion-note slot="end">
+        {{ rapport.doctorName ? rapport.doctorName : 'Sélectionner' }}
+      </ion-note>
+    </ion-item>
+
+    <ion-item (click)="openMotifModal()" button>
+      <ion-label>Motif</ion-label>
+      <ion-note slot="end">
+        {{ rapport.reason ? rapport.reason : 'Sélectionner' }}
+      </ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="stacked">Bilan</ion-label>
+      <ion-textarea
+        [(ngModel)]="rapport.summary"
+        name="bilan"
+        placeholder="Entrer le bilan"
+      >
+      </ion-textarea>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Médicaments offerts</ion-label>
+      <ion-button
+        (click)="openOffreMedicamentModal()"
+        fill="outline"
+        slot="end"
+      >
+        Ajouter
+      </ion-button>
+    </ion-item>
+
+    <ion-item>
+      <h3>Liste des médicaments offerts</h3>
+    </ion-item>
+    <ion-list>
+      <ion-item
+        *ngFor="let specimen of rapport.specimens"
+        button
+        detail="false"
+      >
+        <ion-label>
+          <i>
+            {{ specimen.medicineId.commercialName }} - qte: {{ specimen.quantity
+            }}
+          </i>
+        </ion-label>
+        <ion-button (click)="deleteSpecimen(specimen)" color="light">
+          <ion-icon
+            slot="icon-only"
+            name="trash-sharp"
+            ios="trash-outline"
+            md="trash-sharp"
+            color="secondary"
+          ></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-list>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <ion-button
+            [disabled]="!rapportForm.form.valid"
+            expand="block"
+            type="submit"
+          >
+            Enregistrer
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+
+  <ion-modal [isOpen]="isDateModalOpen" cssClass="custom-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Sélectionner une date</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeDateModal()">Fermer</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-item>
+          <ion-datetime
+            [(ngModel)]="tempDate"
+            display-format="DD/MM/YYYY"
+            name="date"
+            placeholder="Sélectionner une date"
+          >
+          </ion-datetime>
+        </ion-item>
+        <ion-button (click)="confirmDateSelection()" expand="block">
+          Valider
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="isMedecinModalOpen" cssClass="custom-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Sélectionner un médecin</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeMedecinModal()">Fermer</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <ion-item
+            (click)="selectDoctor(doc)"
+            *ngFor="let doc of doctors"
+            [class.selected]="selectedDoctor?.id === doc.id"
+            button
+          >
+            <ion-label>{{ doc.name }}</ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-button (click)="confirmMedecinSelection()" expand="block">
+          Valider
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="isMotifModalOpen" cssClass="custom-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Sélectionner un motif</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeMotifModal()">Fermer</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-list>
+          <ion-item
+            (click)="selectMotif(reason)"
+            *ngFor="let reason of reasons"
+            [class.selected]="selectedMotif === reason"
+            button
+          >
+            <ion-label>{{ reason.label }}</ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-button (click)="confirmMotifSelection()" expand="block">
+          Valider
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+  <ion-modal [isOpen]="isMedicamentModalOpen" cssClass="custom-modal">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-title>Offre médicaments</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="closeOffreMedicamentModal()"
+              >Fermer</ion-button
+            >
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content>
+        <ion-item button>
+          <ion-label>Médicament</ion-label>
+        </ion-item>
+        <ion-list>
+          <ion-item
+            (click)="selectMedicine(medicine)"
+            *ngFor="let medicine of medicines"
+            [class.selected]="selectedMedicine === medicine"
+            button
+          >
+            <ion-label>{{ medicine.commercialName }}</ion-label>
+          </ion-item>
+        </ion-list>
+        <ion-item>
+          <ion-label position="stacked">Quantité</ion-label>
+          <ion-input
+            [(ngModel)]="rapportSpecimens.quantity"
+            name="quantite"
+            placeholder="Entrer la quantité"
+            type="number"
+          >
+          </ion-input>
+        </ion-item>
+        <ion-button (click)="confirmMedicineSelection()" expand="block">
+          Valider
+        </ion-button>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
 </ion-content>

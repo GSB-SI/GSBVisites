@@ -19,8 +19,13 @@ import {
   IonRow,
   IonTextarea,
   IonTitle,
-  IonToolbar
+  IonToolbar,
+  IonIcon,
 } from '@ionic/angular/standalone';
+import { addIcons } from 'ionicons';
+import { trashOutline, trashSharp } from 'ionicons/icons';
+
+
 import {ApiService} from '../services/api.service';
 import {Router} from '@angular/router';
 import {ToastController} from "@ionic/angular";
@@ -30,7 +35,29 @@ import {ToastController} from "@ionic/angular";
   templateUrl: './create-rapport.page.html',
   styleUrls: ['./create-rapport.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, CommonModule, FormsModule, IonButtons, IonBackButton, IonItem, IonLabel, IonDatetime, IonNote, IonTextarea, IonButton, IonGrid, IonRow, IonCol, IonModal, IonInput, IonList]
+  imports: [
+    IonContent,
+    IonHeader,
+    IonTitle,
+    IonToolbar,
+    CommonModule,
+    FormsModule,
+    IonButtons,
+    IonBackButton,
+    IonItem,
+    IonLabel,
+    IonDatetime,
+    IonNote,
+    IonTextarea,
+    IonButton,
+    IonGrid,
+    IonRow,
+    IonCol,
+    IonModal,
+    IonInput,
+    IonList,
+    IonIcon
+  ],
 })
 export class CreateRapportPage {
   rapport: any = {
@@ -40,12 +67,12 @@ export class CreateRapportPage {
     date: '',
     reason: '',
     summary: '',
-    specimens: []
+    specimens: [],
   };
 
   rapportSpecimens: any = {
     medicineId: null,
-    quantity: null
+    quantity: null,
   };
 
   isDateModalOpen: boolean = false;
@@ -62,12 +89,22 @@ export class CreateRapportPage {
   reasons: any[] = [];
   medicines: any[] = [];
 
-  constructor(private apiService: ApiService, private router: Router, private toastController: ToastController) {
-  }
+  constructor(
+    private apiService: ApiService,
+    private router: Router,
+    private toastController: ToastController
+  ) {addIcons({
+    trashOutline,
+    trashSharp,
+  });}
 
   ionViewWillEnter() {
     if (!this.apiService.accountInfos.accessToken) {
-      this.afficheToast('Délai expiré. Vous devez vous reconnecter', 3000, 'middle');
+      this.afficheToast(
+        'Délai expiré. Vous devez vous reconnecter',
+        3000,
+        'middle'
+      );
       this.router.navigate(['/login']);
     }
     this.remplirListeMedecins();
@@ -101,13 +138,15 @@ export class CreateRapportPage {
   onSubmit() {
     console.log('Envoi du rapport :', this.rapport);
     this.rapport.userId = this.apiService.accountInfos.user._id;
-    this.rapport.date = new Date(this.rapport.date.toString()).toLocaleDateString('fr-FR');
+    this.rapport.date = new Date(
+      this.rapport.date.toString()
+    ).toLocaleDateString('fr-FR');
     this.apiService.addUnRapport(this.rapport).subscribe(
-      res => {
+      (res) => {
         console.log('Rapport enregistré avec succès', res);
-        this.router.navigate(['/accueil']);
+        this.router.navigate(['/mes-rapports']);
       },
-      err => {
+      (err) => {
         console.error('Erreur lors de l’enregistrement du rapport', err);
       }
     );
@@ -128,7 +167,7 @@ export class CreateRapportPage {
 
   selectDoctor(doc: any) {
     this.selectedDoctor = doc;
-    this.confirmMedecinSelection()
+    this.confirmMedecinSelection();
   }
 
   confirmMedecinSelection() {
@@ -165,15 +204,20 @@ export class CreateRapportPage {
 
   selectMedicine(medicine: any) {
     this.selectedMedicine = medicine;
-    this.rapportSpecimens.medicineId = medicine._id;
+    this.rapportSpecimens.medicineId = medicine;
   }
 
   confirmMedicineSelection() {
-    if (this.rapportSpecimens.medicineId && this.rapportSpecimens.quantity > 0) {
-      this.rapport.specimens.push({...this.rapportSpecimens});
+    if (
+      this.rapportSpecimens.medicineId &&
+      this.rapportSpecimens.quantity > 0
+    ) {
+      this.rapport.specimens.push({ ...this.rapportSpecimens });
       this.closeOffreMedicamentModal();
     } else {
-      console.error('Veuillez sélectionner un médicament et entrer une quantité');
+      console.error(
+        'Veuillez sélectionner un médicament et entrer une quantité'
+      );
     }
   }
 
@@ -183,19 +227,35 @@ export class CreateRapportPage {
         if (reponse.status == 200) {
           this.doctors = reponse.data;
         } else if (reponse.status == '401') {
-          if (reponse.data.description == "Le jeton d’accès a expiré") {
-            this.afficheToast('Délai expiré. Vous devez vous reconnecter', 3000, 'middle');
+          if (reponse.data.description == 'Le jeton d’accès a expiré') {
+            this.afficheToast(
+              'Délai expiré. Vous devez vous reconnecter',
+              3000,
+              'middle'
+            );
             this.router.navigate(['/login']);
           } else {
-            this.afficheToast("Un problème est survenu. Contactez l'administrateur", 3000, 'middle');
+            this.afficheToast(
+              "Un problème est survenu. Contactez l'administrateur",
+              3000,
+              'middle'
+            );
           }
         } else {
-          this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+          this.afficheToast(
+            "Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit",
+            5000,
+            'middle'
+          );
           console.log(reponse);
         }
       },
       error: () => {
-        this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+        this.afficheToast(
+          "Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit",
+          5000,
+          'middle'
+        );
       },
     });
   }
@@ -214,19 +274,35 @@ export class CreateRapportPage {
         if (reponse.status == 200) {
           this.medicines = reponse.data;
         } else if (reponse.status == '401') {
-          if (reponse.data.description == "Le jeton d’accès a expiré") {
-            this.afficheToast('Délai expiré. Vous devez vous reconnecter', 3000, 'middle');
+          if (reponse.data.description == 'Le jeton d’accès a expiré') {
+            this.afficheToast(
+              'Délai expiré. Vous devez vous reconnecter',
+              3000,
+              'middle'
+            );
             this.router.navigate(['/login']);
           } else {
-            this.afficheToast("Un problème est survenu. Contactez l'administrateur", 3000, 'middle');
+            this.afficheToast(
+              "Un problème est survenu. Contactez l'administrateur",
+              3000,
+              'middle'
+            );
           }
         } else {
-          this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+          this.afficheToast(
+            "Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit",
+            5000,
+            'middle'
+          );
           console.log(reponse);
         }
       },
       error: () => {
-        this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+        this.afficheToast(
+          "Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit",
+          5000,
+          'middle'
+        );
       },
     });
   }
@@ -237,20 +313,45 @@ export class CreateRapportPage {
         if (reponse.status == 200) {
           this.reasons = reponse.data;
         } else if (reponse.status == '401') {
-          if (reponse.data.description == "Le jeton d’accès a expiré") {
-            this.afficheToast('Délai expiré. Vous devez vous reconnecter', 3000, 'middle');
+          if (reponse.data.description == 'Le jeton d’accès a expiré') {
+            this.afficheToast(
+              'Délai expiré. Vous devez vous reconnecter',
+              3000,
+              'middle'
+            );
             this.router.navigate(['/login']);
           } else {
-            this.afficheToast("Un problème est survenu. Contactez l'administrateur", 3000, 'middle');
+            this.afficheToast(
+              "Un problème est survenu. Contactez l'administrateur",
+              3000,
+              'middle'
+            );
           }
         } else {
-          this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+          this.afficheToast(
+            "Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit",
+            5000,
+            'middle'
+          );
           console.log(reponse);
         }
       },
       error: () => {
-        this.afficheToast("Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit", 5000, 'middle');
+        this.afficheToast(
+          "Un problème est survenu. Veuillez ouvrir un ticket d'incident si le problème se reproduit",
+          5000,
+          'middle'
+        );
       },
     });
+  }
+
+  deleteSpecimen(specimen: any) {
+    console.log(specimen);
+
+    this.rapport.specimens = this.rapport.specimens.filter(
+      (ele: any) => ele !== specimen
+    );
+    console.log(this.rapport.specimens);
   }
 }

@@ -1,23 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ApiService } from '../services/api.service';
-import { Router, RouterLink } from '@angular/router';
-import { ToastController } from '@ionic/angular';
-import { environment } from '../../environments/environment';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormsModule} from '@angular/forms';
+import {ApiService} from '../services/api.service';
+import {Router, RouterLink} from '@angular/router';
+import {ToastController} from '@ionic/angular';
+import {environment} from '../../environments/environment';
 import {
   IonButtons,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonHeader,
-  IonIcon,
   IonItem,
   IonLabel,
   IonList,
   IonMenuButton,
+  IonSearchbar,
   IonTitle,
   IonToolbar,
+  IonIcon,
+  IonFab,
+  IonFabButton,
 } from '@ionic/angular/standalone';
 import {addIcons} from "ionicons";
 import {addSharp} from "ionicons/icons";
@@ -41,9 +42,10 @@ import {addSharp} from "ionicons/icons";
     CommonModule,
     FormsModule,
     RouterLink,
-    IonFab,
-    IonFabButton,
+    IonSearchbar,
     IonIcon,
+    IonFab,
+    IonFabButton
   ],
 })
 export class MesRapportsPage implements OnInit {
@@ -93,7 +95,6 @@ export class MesRapportsPage implements OnInit {
     this.api.getMesRapports(this.api.accountInfos.user._id).subscribe({
       next: async (reponse: any) => {
         if (reponse.status == 200) {
-          console.log(reponse.data);
           this.rapports = reponse.data;
           if (this.filtreDate) {
             this.filtrerParDate(this.filtreDate);
